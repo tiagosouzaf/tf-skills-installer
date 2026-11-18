@@ -4,7 +4,7 @@
   "description": "Instalador das tf-skills (conteúdo cifrado, exige senha)",
   "type": "module",
   "bin": {
-    "tf-skills": "./bin.mjs"
+    "tf-skills": "bin.mjs"
   },
   "files": [
     "bin.mjs",
