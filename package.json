@@ -1,6 +1,6 @@
 {
   "name": "tf-skills",
-  "version": "1.0.0",
+  "version": "1.0.1794963316",
   "description": "Instalador das tf-skills (conteúdo cifrado, exige senha)",
   "type": "module",
   "bin": {
