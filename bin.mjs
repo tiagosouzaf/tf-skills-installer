@@ -9,13 +9,21 @@ import { decrypt } from './crypto.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 // Sempre tenta o bundle mais recente do GitHub: o npx guarda o pacote em cache,
-// então o bundle.enc local pode estar velho. Sem rede, usa o local.
-const BUNDLE_URL = 'https://raw.githubusercontent.com/tiagosouzaf/tf-skills-installer/main/bundle.enc';
+// então o bundle.enc local pode estar velho. Busca pelo SHA atual da main (o raw
+// de "main" fica até 5 min em cache no CDN). Sem rede ou com erro, usa o local.
+const REPO = 'tiagosouzaf/tf-skills-installer';
+const baixar = async (url, headers = {}) => {
+  const r = await fetch(url, { headers, signal: AbortSignal.timeout(15000) });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return Buffer.from(await r.arrayBuffer());
+};
 let bundle;
 try {
-  const r = await fetch(`${BUNDLE_URL}?t=${Date.now()}`, { signal: AbortSignal.timeout(15000) });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  bundle = Buffer.from(await r.arrayBuffer());
+  const sha = (await baixar(`https://api.github.com/repos/${REPO}/commits/main`, { Accept: 'application/vnd.github.sha' }))
+    .toString().trim();
+  if (!/^[0-9a-f]{40}$/.test(sha)) throw new Error('sha inválido');
+  bundle = await baixar(`https://raw.githubusercontent.com/${REPO}/${sha}/bundle.enc`);
+  if (bundle.subarray(0, 4).toString() !== 'TFS1') throw new Error('bundle inválido');
 } catch {
   bundle = fs.readFileSync(path.join(here, 'bundle.enc'));
 }
