@@ -3,8 +3,23 @@
   "version": "1.0.0",
   "description": "Instalador das tf-skills (conteúdo cifrado, exige senha)",
   "type": "module",
-  "bin": { "tf-skills": "./bin.mjs" },
-  "files": ["bin.mjs", "crypto.mjs", "bundle.enc"],
-  "engines": { "node": ">=18" },
-  "dependencies": { "@clack/prompts": "^0.11.0" }
+  "bin": {
+    "tf-skills": "./bin.mjs"
+  },
+  "files": [
+    "bin.mjs",
+    "crypto.mjs",
+    "bundle.enc"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiagosouzaf/tf-skills-installer.git"
+  },
+  "license": "UNLICENSED"
 }
