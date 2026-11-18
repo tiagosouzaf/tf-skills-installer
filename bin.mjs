@@ -8,7 +8,17 @@ import * as p from '@clack/prompts';
 import { decrypt } from './crypto.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const bundle = fs.readFileSync(path.join(here, 'bundle.enc'));
+// Sempre tenta o bundle mais recente do GitHub: o npx guarda o pacote em cache,
+// então o bundle.enc local pode estar velho. Sem rede, usa o local.
+const BUNDLE_URL = 'https://raw.githubusercontent.com/tiagosouzaf/tf-skills-installer/main/bundle.enc';
+let bundle;
+try {
+  const r = await fetch(`${BUNDLE_URL}?t=${Date.now()}`, { signal: AbortSignal.timeout(15000) });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  bundle = Buffer.from(await r.arrayBuffer());
+} catch {
+  bundle = fs.readFileSync(path.join(here, 'bundle.enc'));
+}
 
 let files;
 for (let tentativa = 1; !files; tentativa++) {
