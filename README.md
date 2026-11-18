@@ -3,14 +3,11 @@
 Instalador das tf-skills. O conteúdo vai cifrado em `bundle.enc` (AES-256-GCM, chave derivada por scrypt) e só é aberto com a senha.
 
 ```bash
-npx -y tf-skills@latest
+npx -y --allow-remote=all https://github.com/tiagosouzaf/tf-skills-installer/archive/refs/heads/main.tar.gz
 ```
 
-Alternativa direto do GitHub (precisa de `git`; o `--allow-git=all` é exigido pelo npm 12+):
+Não precisa de `git`. O `--allow-remote=all` é exigido pelo npm 12+ e ignorado pelos anteriores.
+Requisitos: Node.js ≥ 18. Funciona em Linux, macOS, WSL e Windows (PowerShell ou cmd).
 
-```bash
-npx -y --allow-git=all github:tiagosouzaf/tf-skills-installer
-```
-
-Requisitos: Node.js ≥ 18. Funciona em Linux, macOS, WSL e Windows. Para atualizar ou remover skills, rode o mesmo comando de novo.
-Sem interação: defina `TF_SKILLS_SENHA` antes do comando.
+A cada execução o instalador baixa a versão mais recente das skills, mesmo que o npx tenha guardado o pacote em cache.
+Para atualizar ou remover skills, rode o mesmo comando de novo. Sem interação: defina `TF_SKILLS_SENHA` antes do comando.
